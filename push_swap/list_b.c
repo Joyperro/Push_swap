@@ -1,22 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list_a.c                                           :+:      :+:    :+:   */
+/*   list_b.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dclement <dclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/07 17:56:51 by dclement          #+#    #+#             */
-/*   Updated: 2025/01/15 16:01:44 by dclement         ###   ########.fr       */
+/*   Created: 2024/10/03 16:58:52 by dclement          #+#    #+#             */
+/*   Updated: 2024/10/17 19:11:10 by dclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_stack_a	*ft_newnode_a(int content)
+t_stack_b	*create_list_b(int argc, char **argv)
 {
-	t_stack_a	*ptr;
+	int			i;
+	t_stack_b	*head_b;
+	t_stack_b	*tmp;
 
-	ptr = (t_stack_a *)malloc(sizeof(t_stack_a));
+	i = 1;
+	head_b = ft_newnode_b(ft_atoi(argv[i]));
+	tmp = head_b;
+	while (++i < argc)
+	{
+		tmp->next = ft_newnode_b(ft_atoi(argv[i]));
+		tmp = tmp->next;
+		tmp->next = NULL;
+	}
+	return (head_b);
+}
+
+t_stack_b	*ft_newnode_b(int content)
+{
+	t_stack_b	*ptr;
+
+	ptr = (t_stack_b *)malloc(sizeof(t_stack_b));
 	if (!ptr)
 		return (NULL);
 	ptr->num = content;
@@ -24,30 +42,9 @@ t_stack_a	*ft_newnode_a(int content)
 	return (ptr);
 }
 
-t_stack_a	*create_list_a(int num, char **str, int flag)
+void	ft_clearnode_b(t_stack_b **lst)
 {
-	int			i;
-	t_stack_a	*head_a;
-	t_stack_a	*tmp;
-
-	if (flag == 0)
-		i = 1;
-	else
-		i = 0;
-	head_a = ft_newnode_a(ft_atoi(str[i]));
-	tmp = head_a;
-	while (++i < num)
-	{
-		tmp->next = ft_newnode_a(ft_atoi(str[i]));
-		tmp = tmp->next;
-		tmp->next = NULL;
-	}
-	return (head_a);
-}
-
-void	ft_clearnode_a(t_stack_a **lst)
-{
-	t_stack_a	*ptr;
+	t_stack_b	*ptr;
 
 	while (*lst != NULL)
 	{
@@ -57,12 +54,12 @@ void	ft_clearnode_a(t_stack_a **lst)
 	}
 }
 
-int	ft_lstsize_a(t_stack_a *head_a)
+int	ft_lstsize_b(t_stack_b *head_b)
 {
-	t_stack_a	*tmp;
+	t_stack_b	*tmp;
 	int			count;
 
-	tmp = head_a;
+	tmp = head_b;
 	count = 0;
 	while (tmp != NULL)
 	{
@@ -72,11 +69,11 @@ int	ft_lstsize_a(t_stack_a *head_a)
 	return (count);
 }
 
-t_stack_a	*ft_lstlast_a(t_stack_a *head_a)
+t_stack_b	*ft_lstlast_b(t_stack_b *head_b)
 {
-	if (head_a == NULL)
+	if (head_b == NULL)
 		return (NULL);
-	while (head_a->next != NULL)
-		head_a = head_a->next;
-	return (head_a);
+	while (head_b->next != NULL)
+		head_b = head_b->next;
+	return (head_b);
 }

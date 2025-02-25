@@ -6,11 +6,14 @@
 /*   By: dclement <dclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 16:37:09 by dclement          #+#    #+#             */
-/*   Updated: 2024/05/13 17:28:38 by dclement         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:23:59 by dclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+void	ft_swap_a(t_stack_a *head_a, int print);
+void	ft_swap_b(t_stack_b *head_b, int print);
 
 void	ft_swap(t_stacks *stacks, char ch)
 {

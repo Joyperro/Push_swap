@@ -6,40 +6,36 @@
 /*   By: dclement <dclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:22:00 by dclement          #+#    #+#             */
-/*   Updated: 2024/05/07 18:00:39 by dclement         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:02:04 by dclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	error_check(int argc, char **argv)
-{
-	if (argc == 1)
-		exit(0);
-	check_ints(argc, argv);
-	check_int_size(argc, argv);
-}
+void	error(t_stacks *stacks);
 
-void	check_ints(int argc, char **argv)
+static void	check_ints(int num, char **str, int flag, t_stacks *stacks)
 {
 	int	i;
 	int	j;
 
-	i = 1;
-	while (i < argc)
+	i = is_flag(flag);
+	while (i < num)
 	{
 		j = 0;
-		if (argv[i][j] == '\0')
-			error();
-		while(j < (int)ft_strlen(argv[i]))
+		if (str[i][j] == '\0')
+			error(stacks);
+		while (j < (int)ft_strlen(str[i]))
 		{
-			if (!ft_isdigit(argv[i][j]))
+			if (!ft_isdigit(str[i][j]))
 			{
-				if (j == 0 && ft_strlen(argv[i]) != 1
-					&& (argv[i][j] == '-' || argv[i][j] == '+'))
+				if (j == 0 && ft_strlen(str[i]) != 1 && (str[i][j] == '-'
+					|| str[i][j] == '+'))
+				{
 					j++;
-				else
-					error();
+					continue ;
+				}
+				error(stacks);
 			}
 			j++;
 		}
@@ -47,22 +43,54 @@ void	check_ints(int argc, char **argv)
 	}
 }
 
-void	check_int_size(int argc, char **argv)
+static void	check_int_size(int n, char **str, int flag, t_stacks *stacks)
 {
 	long	num;
 	int		i;
 
-	i = 1;
-	while (i < argc)
+	if (flag == 0)
+		i = 1;
+	else
+		i = 0;
+	while (i < n)
 	{
-		num = ft_atoi(argv[i]);
+		num = ft_atol(str[i]);
 		if (num > INTMAX || num < INTMIN)
-			error();
+			error(stacks);
 		i++;
 	}
 }
 
-void	check_double(t_stack_a *head_a)
+void	error_check(int argc, char **argv, t_stacks *stacks)
+{
+	char	*trimmed;
+
+	if (argc > 2)
+	{
+		check_ints(argc, argv, 0, stacks);
+		check_int_size(argc, argv, 0, stacks);
+		return ;
+	}
+	else if (argc == 2)
+	{
+		if (argv[1][0] == '"' || argv[1][ft_strlen(argv[1])] == '"')
+			error(stacks);
+		trimmed = ft_strdup(argv[1]);
+		if (!trimmed)
+			error(stacks);
+		stacks->one_arg = ft_split(trimmed, ' ');
+		if (!stacks->one_arg || !stacks->one_arg[0])
+		{
+			free(trimmed);
+			error(stacks);
+		}
+	}
+	check_ints(ft_split_count(stacks->one_arg), stacks->one_arg, 1, stacks);
+	check_int_size(ft_split_count(stacks->one_arg), stacks->one_arg, 1, stacks);
+	free(trimmed);
+}
+
+void	check_double(t_stack_a *head_a, t_stacks *stacks)
 {
 	t_stack_a	*tmp;
 	t_stack_a	*ptr;
@@ -76,10 +104,10 @@ void	check_double(t_stack_a *head_a)
 		tmp = tmp->next;
 		while (tmp != NULL)
 		{
-			if (num = tmp->num)
+			if (num == tmp->num)
 			{
 				ft_clearnode_a(&head_a);
-				error();
+				error(stacks);
 			}
 			tmp = tmp->next;
 		}
@@ -87,8 +115,9 @@ void	check_double(t_stack_a *head_a)
 	}
 }
 
-void	error()
+void	error(t_stacks *stacks)
 {
-	ft_printf("Error\n");
-	exit(0);
+	ft_putstr_fd("Error\n", 2);
+	free_all(stacks);
+	exit(1);
 }
